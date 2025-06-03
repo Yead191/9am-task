@@ -23,12 +23,6 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     Component: Dashboard,
-    children: [
-      {
-        path: ":shopName",
-        Component: ShopDashboard,
-      },
-    ],
   },
 ]);
 

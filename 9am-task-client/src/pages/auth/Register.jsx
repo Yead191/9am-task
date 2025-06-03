@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Store, User, Lock, Plus, X } from "lucide-react";
+import { toast } from "sonner";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,9 +29,17 @@ const Register = () => {
     setIsLoading(true);
     setError("");
 
-    const shopNames = formData.shopNames.filter((name) => name.trim() !== "");
-    if (shopNames.length < 3) {
-      setError("At least 3 shop names required");
+    const shops = formData.shopNames.filter((name) => name.trim() !== "");
+    if (shops.length < 3 || shops.length > 5) {
+      setError("Please provide 3–5 shop names");
+      setIsLoading(false);
+      return;
+    }
+
+    // Check for duplicate shop names
+    const uniqueShops = new Set(shops.map((name) => name.toLowerCase()));
+    if (uniqueShops.size !== shops.length) {
+      setError("Shop names must be unique");
       setIsLoading(false);
       return;
     }
@@ -39,8 +48,9 @@ const Register = () => {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
         username: formData.username,
         password: formData.password,
-        shopNames,
+        shopNames: shops,
       });
+      toast.success("Registered Successfully!");
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "Error signing up");
@@ -76,7 +86,7 @@ const Register = () => {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4">
             {/* <Store className="w-8 h-8 text-white" />  */}
-            <span className="text-white text-2xl" >9am</span>
+            <span className="text-white text-2xl">9am</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Create Account

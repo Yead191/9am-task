@@ -8,7 +8,7 @@ const client = new MongoClient(uri);
 let db;
 async function connectDB() {
   try {
-    await client.connect();
+    // await client.connect();
     db = client.db('9am-task');
     console.log('Connected to MongoDB');
   } catch (error) {
